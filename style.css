@@ -66,3 +66,10 @@ body{margin:0;background:linear-gradient(135deg,#dff5ff,#f7fbff);font-family:Ari
   .firma-digital{padding:10px}
   .firma-digital .firma{height:170px;min-height:170px}
 }
+
+/* Estudios realizados: campos editables y adaptables al telefono */
+.tabla-estudios-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabla-estudios{min-width:700px}
+.tabla-estudios td input{box-sizing:border-box;width:100%;min-width:100px;border:1px solid #d2e3ea;border-radius:4px;background:#fff;color:#17324d;padding:6px;font:inherit;outline:none}
+.tabla-estudios td input:focus{border-color:var(--celeste);box-shadow:0 0 0 2px #28a9e022}
+@media(max-width:560px){.tabla-estudios-wrap{margin-bottom:8px}.tabla-estudios td input{font-size:16px;min-height:38px;padding:7px}}
