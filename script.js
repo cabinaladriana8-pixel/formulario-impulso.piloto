@@ -10,3 +10,18 @@ document.addEventListener("DOMContentLoaded",()=>{
  c.addEventListener("mousedown",start);c.addEventListener("mousemove",move);window.addEventListener("mouseup",end);c.addEventListener("touchstart",start,{passive:false});c.addEventListener("touchmove",move,{passive:false});c.addEventListener("touchend",end,{passive:false});c.addEventListener("touchcancel",end,{passive:false});
  b.addEventListener("click",()=>ctx.clearRect(0,0,c.width,c.height));
 });
+
+
+// Compatibilidad adicional para pantallas táctiles y lápiz digital.
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("firma");
+  if (!canvas || canvas.dataset.pointerReady) return;
+  canvas.dataset.pointerReady = "1";
+  const ctx = canvas.getContext("2d");
+  let drawing = false;
+  const point = e => { const r=canvas.getBoundingClientRect(); return {x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height}; };
+  canvas.addEventListener("pointerdown", e => { drawing=true; canvas.setPointerCapture?.(e.pointerId); const p=point(e); ctx.beginPath(); ctx.moveTo(p.x,p.y); });
+  canvas.addEventListener("pointermove", e => { if(!drawing)return; const p=point(e); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+  canvas.addEventListener("pointerup", () => drawing=false);
+  canvas.addEventListener("pointercancel", () => drawing=false);
+});
