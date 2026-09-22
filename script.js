@@ -1,75 +1,23 @@
+*{box-sizing:border-box}
+:root{--azul:#164e8a;--celeste:#28a9e0;--turquesa:#14b8a6;--amarillo:#ffd54a;--fondo:#eef8fc;--borde:#b7d8e7;--texto:#17324d}
+html{scroll-behavior:smooth}
+body{margin:0;background:linear-gradient(135deg,#dff5ff,#f7fbff);font-family:Arial,Helvetica,sans-serif;color:var(--texto);font-size:11px}
+.buttonbar{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:10px 0}.btn{border:0;border-radius:8px;padding:10px 16px;font-weight:900;cursor:pointer;background:linear-gradient(90deg,var(--azul),var(--turquesa));color:white;box-shadow:0 4px 12px #147a8a55}.btn.alt{background:var(--amarillo);color:#493900}.btn:hover{filter:brightness(1.04);transform:translateY(-1px)}
+.wrapper{padding:8px 0}.hoja{width:210mm;min-height:297mm;margin:18px auto;background:white;padding:10mm;position:relative;box-shadow:0 8px 30px #9bb8c8;border-radius:4px;page-break-after:always}.hoja:last-child{page-break-after:auto}
+.hoja:before{display:none}.hoja:after{display:none}
+.top{display:flex;align-items:center;justify-content:space-between;border-radius:12px;padding:10px 14px;margin-bottom:10px;background:linear-gradient(100deg,var(--azul),var(--celeste),var(--turquesa));color:white}.top h1{margin:2px 0;font-size:21px;letter-spacing:1px;color:white;text-transform:none}.req{background:linear-gradient(120deg,#f0fcff,#fffbea);border:1.5px solid var(--borde);border-radius:10px;padding:8px;color:var(--texto);font-size:9px;line-height:1.4;box-shadow:none}.req b{color:var(--azul);font-size:11px}.photo{width:35mm;height:40mm;border:2px dashed var(--celeste);border-radius:8px;background:#f0fbff;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--azul);font-weight:bold;font-size:9px}.photo:after{content:'FOTOGRAFÍA';display:block;margin-top:5px}.section-title{font-size:13px;color:white;background:linear-gradient(90deg,var(--azul),var(--celeste));padding:6px 9px;border-radius:7px;margin:8px 0;font-weight:900}.grid{display:grid;gap:6px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+.field{min-height:36px;border:1px solid #9dc7d8;border-radius:5px;padding:5px;background:#fff}.field label{font-weight:bold;display:flex;flex-direction:column;gap:3px;color:var(--texto);font-size:10px}.field input,.field textarea{font:inherit;color:#17324d;border:1px solid #9dc7d8;background:#fff;padding:5px;border-radius:5px;outline:none;width:100%;height:auto}.field input:focus,.field textarea:focus{border-color:var(--celeste);box-shadow:0 0 0 2px #28a9e022}.field textarea{min-height:55px;resize:vertical}.wide{grid-column:1/-1}
+.checks{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;background:#f1fbfe;padding:7px;border-radius:7px;margin:6px 0}.checks label{font-weight:normal;display:block;border:0;border-radius:0;padding:2px;background:transparent;font-size:10px;box-shadow:none}.checks input{accent-color:var(--turquesa);margin-right:4px}
+.table{width:100%;border-collapse:collapse;margin:5px 0}.table th{background:#d9f3fb;color:var(--azul);padding:3px}.table td,.table th{border:1px solid #9fc5d2;padding:3px}.table td input{border:0;width:100%;padding:3px}
+.small{font-size:9px;line-height:1.35}.note{border:1px solid #aac6d1;border-radius:6px;padding:7px;font-size:9px;line-height:1.35;margin:7px 0;background:#fffdf0}.uso{border:1px solid #8ecbd9;border-radius:10px;padding:8px;background:linear-gradient(135deg,#f5fdff,#fffef1)}.footer{position:absolute;bottom:7mm;left:10mm;right:10mm;padding-top:4px;border-top:1px solid #d4e5eb;font-size:8px;color:#617789;display:flex;justify-content:space-between}.sp{height:5px}.signature{height:100px;border:2px solid #345;background:white;border-radius:5px}
+@media(max-width:850px){body{background:#eef8fc}.hoja{width:100%;min-height:auto;margin:0;padding:12px;border-radius:0}.top{display:flex;flex-direction:column;gap:8px}.g2,.g3,.g4{grid-template-columns:1fr 1fr}.checks{grid-template-columns:1fr 1fr}.wrapper{padding:0}.photo{margin:auto}}
+@media(max-width:560px){.g2,.g3,.g4,.checks{grid-template-columns:1fr}.hoja{padding:10px}}
+@media print{body{background:white}.buttonbar{display:none}.wrapper{padding:0}.hoja{width:210mm;min-height:297mm;margin:0;box-shadow:none;border-radius:0;page-break-after:always}.hoja:last-child{page-break-after:auto}}
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Cada grupo data-check permite seleccionar solo una opción.
-  document.querySelectorAll('[data-check]').forEach(box => {
-    box.addEventListener('change', () => {
-      if (!box.checked) return;
-      document.querySelectorAll(`[data-check="${box.dataset.check}"]`).forEach(x => {
-        if (x !== box) x.checked = false;
-      });
-    });
-  });
 
-  // Aviso visual para archivos cargados.
-  document.querySelectorAll('input[type="file"]').forEach(input => {
-    input.addEventListener('change', () => {
-      if (input.files.length && input.nextElementSibling) {
-        input.nextElementSibling.classList.add('ok');
-      }
-    });
-  });
-
-  // Firma táctil / mouse si existe un canvas con clase firma.
-  document.querySelectorAll('.firma').forEach(canvas => {
-    const ctx = canvas.getContext('2d');
-    let drawing = false;
-
-    const resize = () => {
-      const rect = canvas.getBoundingClientRect();
-      const old = canvas.toDataURL();
-      canvas.width = Math.max(1, Math.floor(rect.width * devicePixelRatio));
-      canvas.height = Math.max(1, Math.floor(rect.height * devicePixelRatio));
-      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
-      if (old && old !== 'data:,') {
-        const img = new Image();
-        img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height);
-        img.src = old;
-      }
-    };
-
-    resize();
-    window.addEventListener('resize', resize);
-
-    const point = e => {
-      const r = canvas.getBoundingClientRect();
-      const t = e.touches && e.touches[0];
-      return {x:(t ? t.clientX : e.clientX)-r.left, y:(t ? t.clientY : e.clientY)-r.top};
-    };
-
-    const start = e => {
-      drawing = true;
-      const p = point(e);
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y);
-      e.preventDefault();
-    };
-    const move = e => {
-      if (!drawing) return;
-      const p = point(e);
-      ctx.lineTo(p.x, p.y);
-      ctx.stroke();
-      e.preventDefault();
-    };
-
-    canvas.addEventListener('mousedown', start);
-    canvas.addEventListener('mousemove', move);
-    window.addEventListener('mouseup', () => drawing = false);
-    canvas.addEventListener('touchstart', start, {passive:false});
-    canvas.addEventListener('touchmove', move, {passive:false});
-    canvas.addEventListener('touchend', () => drawing = false);
-  });
-});
-
-function imprimir() {
-  window.print();
-}
+.firma-digital{margin-top:10px;padding:8px;border:1px solid #8ecbd9;border-radius:10px;background:linear-gradient(135deg,#f5fdff,#fffef1)}
+.firma-digital h3{margin:0 0 4px;color:#164e8a}
+.firma-digital p{font-size:9px;margin:3px 0 6px}
+.firma-digital .firma{display:block;width:100%;height:120px;background:#fff;border:2px dashed #28a9e0;border-radius:7px;touch-action:none;cursor:crosshair}
+#limpiarFirma{margin-top:6px;border:0;border-radius:7px;padding:7px 12px;font-weight:bold;cursor:pointer;background:#ffd54a;color:#493900}
+@media print{#limpiarFirma{display:none}}
